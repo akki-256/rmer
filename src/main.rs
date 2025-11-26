@@ -1,14 +1,14 @@
-use std::io;
+#![allow(unused)]
+use std::{io, path};
 
+mod add;
 mod comfig;
 mod run;
 mod types;
-fn main() -> io::Result<()> {
-    let rc_vec = comfig::get_rc()?;
 
-    for rc_line in rc_vec.iter() {
-        run::remove_in_dir(rc_line)?;
-    }
+fn main() -> io::Result<()> {
+    let path = path::PathBuf::from("/Users/k23003kk/src/rmer/target/debug/sample2dir");
+    add::add_target(path)?;
 
     Ok(())
 }

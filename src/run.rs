@@ -1,14 +1,15 @@
+//削除の実行
+
 use std::{
     fs,
     io::{self, BufRead},
-    path::Path,
 };
 
-use crate::types::RcInfo;
+use crate::types::Target;
 
-fn check_target_dir(path: &RcInfo) -> Result<(), io::Error> {
+fn check_target_dir(target: &Target) -> Result<(), io::Error> {
     //削除対象ファイルのすり替わりチェック
-    let target_path = Path::new(&path.target_path).join("rmer_target");
+    let target_path = target.path.join("rmer_target");
     let target_file = fs::File::open(target_path)?;
     let mut target_file_buf = io::BufReader::new(target_file);
 
@@ -22,7 +23,7 @@ fn check_target_dir(path: &RcInfo) -> Result<(), io::Error> {
         .trim();
 
     //ファイル内idチェック
-    if id.eq(path.uuid_str.as_str()) {
+    if id.eq(&String::from(target.uuid)) {
         Ok(())
     } else {
         Err(io::Error::new(
@@ -32,13 +33,13 @@ fn check_target_dir(path: &RcInfo) -> Result<(), io::Error> {
     }
 }
 
-pub fn remove_in_dir(path: &RcInfo) -> io::Result<()> {
-    check_target_dir(path)?;
+pub fn remove_in_dir(target: &Target) -> io::Result<()> {
+    check_target_dir(target)?;
 
-    let dir = fs::read_dir(&path.target_path)?;
+    let dir = fs::read_dir(&target.path)?;
     for de in dir {
         let de = de?;
-        if de.file_name() == "rmer_target" {
+        if de.file_name() == ".rmer_target" {
             println!("ターゲットファイル");
             continue;
         };
