@@ -1,5 +1,6 @@
+use clap::{Parser, Subcommand};
 use core::fmt;
-use std::path;
+use std::path::{self, PathBuf};
 use uuid::Uuid;
 
 pub struct Target {
@@ -11,4 +12,28 @@ impl fmt::Display for Target {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{},{}", self.path.display(), self.uuid)
     }
+}
+
+#[derive(Parser, Debug)]
+#[command(version, about)]
+pub struct Args {
+    #[command(subcommand)]
+    pub sub_command: SubCommand,
+}
+
+#[derive(Subcommand, Debug)]
+pub enum SubCommand {
+    //削除対象となるディレクトリを追加
+    #[arg()]
+    Add {
+        #[arg(default_value = "./")]
+        dir: path::PathBuf,
+    },
+    //削除の実行
+    Run,
+    //指定の削除対象のディレクトリを除外する(未実装)
+    Exclude {
+        #[arg(default_value = "./")]
+        dir: PathBuf,
+    },
 }

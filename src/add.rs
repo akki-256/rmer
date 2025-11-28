@@ -37,6 +37,7 @@ fn check_already_target(path: &path::PathBuf) -> io::Result<bool> {
 }
 
 //引数を&strからpathBufに変更
+//TODO ディレクトリがカレントディレクトリの場合(引数なしの場合)絶対パスに直す必要あり
 pub fn add_target(path: path::PathBuf) -> io::Result<()> {
     // println!("add_target");
     let already_target = check_already_target(&path)?;

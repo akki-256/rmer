@@ -1,5 +1,12 @@
-#![allow(unused)]
-use std::{io, path};
+// #![allow(unused)]
+use std::io;
+
+use clap::Parser;
+
+use crate::{
+    add::add_target,
+    types::{Args, SubCommand},
+};
 
 mod add;
 mod comfig;
@@ -7,8 +14,12 @@ mod run;
 mod types;
 
 fn main() -> io::Result<()> {
-    let path = path::PathBuf::from("/Users/k23003kk/src/rmer/target/debug/sample2dir");
-    add::add_target(path)?;
+    let args = Args::parse();
+    match args.sub_command {
+        SubCommand::Add { dir } => println!("add:{:?}", dir),
+        SubCommand::Run => println!("run"),
+        SubCommand::Exclude { dir } => println!("exclude:{:?}", dir),
+    }
 
     Ok(())
 }
