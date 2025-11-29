@@ -15,7 +15,6 @@ const RC_FILE_NAME: &str = ".rmer_rc";
 //設定ファイルのアクセス
 //設定ファイルがない状態で読み込もうとすると追記ができない
 fn open_rc(append: bool) -> io::Result<File> {
-    // println!("open_rc");
     let home_dir = home_dir()
         .ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, "home directory is not found"))?;
 
@@ -26,7 +25,9 @@ fn open_rc(append: bool) -> io::Result<File> {
             .create(true)
             .open(home_dir.join(RC_FILE_NAME))?;
     } else {
-        rc_file = OpenOptions::new().read(true).open(RC_FILE_NAME)?;
+        rc_file = OpenOptions::new()
+            .read(true)
+            .open(home_dir.join(RC_FILE_NAME))?;
     }
 
     Ok(rc_file)
@@ -34,14 +35,12 @@ fn open_rc(append: bool) -> io::Result<File> {
 
 //設定ファイルの読み込み
 pub fn read_rc() -> io::Result<Vec<Target>> {
-    // println!("read_rc");
     let rc_file = open_rc(false)?;
     let rc_reader = io::BufReader::new(rc_file);
 
     //中身を整形しVecに変換
     let mut rc_vec: Vec<Target> = Vec::new();
     for rc_line in rc_reader.lines() {
-        // println!("rc_line");
         let rc_line = rc_line?;
         let mut splits = rc_line.split(",");
         if let (Some(path), Some(uuid)) = (splits.next(), splits.next()) {

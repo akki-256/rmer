@@ -1,4 +1,4 @@
-// #![allow(unused)]
+#![allow(unused)]
 use std::io;
 
 use clap::Parser;
@@ -16,9 +16,9 @@ mod types;
 fn main() -> io::Result<()> {
     let args = Args::parse();
     match args.sub_command {
-        SubCommand::Add { dir } => println!("add:{:?}", dir),
+        SubCommand::Add { path } => add::add_target(path)?,
         SubCommand::Run => println!("run"),
-        SubCommand::Exclude { dir } => println!("exclude:{:?}", dir),
+        SubCommand::Exclude { path } => println!("exclude:{:?}", path),
     }
 
     Ok(())

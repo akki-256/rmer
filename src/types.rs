@@ -27,13 +27,13 @@ pub enum SubCommand {
     #[arg()]
     Add {
         #[arg(default_value = "./")]
-        dir: path::PathBuf,
+        path: path::PathBuf,
     },
     //削除の実行
     Run,
     //指定の削除対象のディレクトリを除外する(未実装)
     Exclude {
         #[arg(default_value = "./")]
-        dir: PathBuf,
+        path: PathBuf,
     },
 }

@@ -1,6 +1,6 @@
 //削除対象を追加
 
-use std::fs::OpenOptions;
+use std::fs::{self, OpenOptions};
 use std::{
     io::{self, Write},
     path,
@@ -36,21 +36,20 @@ fn check_already_target(path: &path::PathBuf) -> io::Result<bool> {
     Ok(found)
 }
 
-//引数を&strからpathBufに変更
-//TODO ディレクトリがカレントディレクトリの場合(引数なしの場合)絶対パスに直す必要あり
 pub fn add_target(path: path::PathBuf) -> io::Result<()> {
-    // println!("add_target");
-    let already_target = check_already_target(&path)?;
+    let abs_path = fs::canonicalize(path)?;
+
+    let already_target = check_already_target(&abs_path)?;
     if !already_target {
         let target = Target {
-            path: path,
+            path: abs_path,
             uuid: uuid::Uuid::new_v4(),
         };
 
         add_target_file(&target).expect("add");
         write_new_target_rc(&target).expect("write");
     } else {
-        eprintln!("{} is already target", &path.display());
+        eprintln!("{}\n This is already target", &abs_path.display());
     }
 
     Ok(())
