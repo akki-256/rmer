@@ -1,16 +1,17 @@
 //削除の実行
 
 use std::{
-    fs,
+    fs, future,
     io::{self, BufRead},
 };
 
-use crate::types::Target;
+use crate::{comfig::read_rc, types::Target};
 
 fn check_target_dir(target: &Target) -> Result<(), io::Error> {
     //削除対象ファイルのすり替わりチェック
-    let target_path = target.path.join("rmer_target");
+    let target_path = target.path.join(".rmer_target");
     let target_file = fs::File::open(target_path)?;
+
     let mut target_file_buf = io::BufReader::new(target_file);
 
     //設定ファイルのid取得
@@ -33,7 +34,8 @@ fn check_target_dir(target: &Target) -> Result<(), io::Error> {
     }
 }
 
-pub fn remove_in_dir(target: &Target) -> io::Result<()> {
+fn remove_in_dir(target: &Target) -> io::Result<()> {
+    println!("remove_in_dir()");
     check_target_dir(target)?;
 
     let dir = fs::read_dir(&target.path)?;
@@ -51,6 +53,16 @@ pub fn remove_in_dir(target: &Target) -> io::Result<()> {
             println!("{:?} is file", de);
             // fs::remove_file(de.path())?;
         }
+    }
+
+    Ok(())
+}
+
+pub fn run() -> io::Result<()> {
+    let rc_vec = read_rc()?;
+    for rc_line in rc_vec {
+        println!("{}", rc_line);
+        remove_in_dir(&rc_line)?;
     }
 
     Ok(())

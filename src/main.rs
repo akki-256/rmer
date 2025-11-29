@@ -17,7 +17,7 @@ fn main() -> io::Result<()> {
     let args = Args::parse();
     match args.sub_command {
         SubCommand::Add { path } => add::add_target(path)?,
-        SubCommand::Run => println!("run"),
+        SubCommand::Run => run::run()?,
         SubCommand::Exclude { path } => println!("exclude:{:?}", path),
     }
 
