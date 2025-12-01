@@ -6,7 +6,7 @@ use std::{
     path,
 };
 
-use crate::comfig::{read_rc, write_new_target_rc};
+use crate::file::rc_file::{read_rc, write_new_target_rc};
 use crate::types::Target;
 
 //対象ファイルの作成

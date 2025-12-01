@@ -5,8 +5,8 @@ use clap::Parser;
 
 use crate::types::{Args, SubCommand};
 
-mod comfig;
 mod commands;
+mod file;
 mod types;
 
 fn main() -> io::Result<()> {
