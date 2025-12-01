@@ -3,21 +3,17 @@ use std::io;
 
 use clap::Parser;
 
-use crate::{
-    add::add_target,
-    types::{Args, SubCommand},
-};
+use crate::types::{Args, SubCommand};
 
-mod add;
 mod comfig;
-mod run;
+mod commands;
 mod types;
 
 fn main() -> io::Result<()> {
     let args = Args::parse();
     match args.sub_command {
-        SubCommand::Add { path } => add::add_target(path)?,
-        SubCommand::Run => run::run()?,
+        SubCommand::Add { path } => commands::add::add_target(path)?,
+        SubCommand::Run => commands::run::run()?,
         SubCommand::Exclude { path } => println!("exclude:{:?}", path),
     }
 
