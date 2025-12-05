@@ -1,6 +1,6 @@
 //削除対象を追加
 
-use std::fs::{self, OpenOptions};
+use std::fs::OpenOptions;
 use std::{
     io::{self, Write},
     path,
@@ -37,19 +37,17 @@ fn check_already_target(path: &path::PathBuf) -> io::Result<bool> {
 }
 
 pub fn add_target(path: path::PathBuf) -> io::Result<()> {
-    let abs_path = fs::canonicalize(path)?;
-
-    let already_target = check_already_target(&abs_path)?;
+    let already_target = check_already_target(&path)?;
     if !already_target {
         let target = Target {
-            path: abs_path,
+            path: path,
             uuid: uuid::Uuid::new_v4(),
         };
 
         add_target_file(&target)?;
         write_new_target_rc(&target)?;
     } else {
-        eprintln!("{}\n This is already target", &abs_path.display());
+        eprintln!("{}\n This is already target", &path.display());
     }
 
     Ok(())
