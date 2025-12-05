@@ -46,8 +46,8 @@ pub fn add_target(path: path::PathBuf) -> io::Result<()> {
             uuid: uuid::Uuid::new_v4(),
         };
 
-        add_target_file(&target).expect("add");
-        write_new_target_rc(&target).expect("write");
+        add_target_file(&target)?;
+        write_new_target_rc(&target)?;
     } else {
         eprintln!("{}\n This is already target", &abs_path.display());
     }

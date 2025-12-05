@@ -1,33 +1,32 @@
 use std::{
-    fs,
+    fs::{self, File},
     io::{self, BufRead},
+    path,
+    str::FromStr,
 };
 
-use crate::types::Target;
+use uuid::Uuid;
 
-pub fn check_target_dir(target: &Target) -> Result<(), io::Error> {
-    //削除対象ファイルのすり替わりチェック
-    let target_path = target.path.join(".rmer_target");
-    let target_file = fs::File::open(target_path)?;
+pub fn delete_target_file(path: &path::PathBuf) -> io::Result<()> {
+    fs::remove_file(path)?;
 
+    Ok(())
+}
+
+pub fn read_target_file_line(path: &path::PathBuf) -> io::Result<Uuid> {
+    let target_path = path.join(".rmer_target");
+    let target_file = File::open(target_path)?;
     let mut target_file_buf = io::BufReader::new(target_file);
 
-    //設定ファイルのid取得
     let mut line = String::new();
-    let _ = target_file_buf.read_line(&mut line);
-    let id = line
+    let _ = target_file_buf.read_line(&mut line)?;
+    let id_str = line
         .split_once("=")
         .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidData, "設定ファイルが不正です"))?
         .1
         .trim();
 
-    //ファイル内idチェック
-    if id.eq(&String::from(target.uuid)) {
-        Ok(())
-    } else {
-        Err(io::Error::new(
-            io::ErrorKind::InvalidData,
-            "設定ファイルのIDが不正です",
-        ))
-    }
+    let id = Uuid::from_str(id_str).map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
+
+    Ok(id)
 }

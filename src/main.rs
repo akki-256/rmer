@@ -1,4 +1,4 @@
-#![allow(unused)]
+// #![allow(unused)]
 use std::io;
 
 use clap::Parser;
@@ -14,7 +14,7 @@ fn main() -> io::Result<()> {
     match args.sub_command {
         SubCommand::Add { path } => commands::add::add_target(path)?,
         SubCommand::Run => commands::run::run()?,
-        SubCommand::Exclude { path } => println!("exclude:{:?}", path),
+        SubCommand::Exclude { path } => commands::exclude::exclude(path)?,
     }
 
     Ok(())
