@@ -12,9 +12,9 @@ mod types;
 fn main() -> io::Result<()> {
     let args = Args::parse();
     match args.sub_command {
-        SubCommand::Add { path } => commands::add::add_target(path)?,
+        SubCommand::Add { dir_path } => commands::add::add_target(dir_path)?,
         SubCommand::Run => commands::run::run()?,
-        SubCommand::Exclude { path } => commands::exclude::exclude(path)?,
+        SubCommand::Drop { dir_path } => commands::exclude::exclude(dir_path)?,
     }
 
     Ok(())

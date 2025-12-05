@@ -29,16 +29,15 @@ fn remove_in_dir(target: &Target) -> io::Result<()> {
     for de in dir {
         let de = de?;
         if de.file_name() == ".rmer_target" {
-            // println!("ターゲットファイル");
+            println!("ターゲットファイル");
             continue;
         };
-
         if de.path().is_dir() {
-            // println!("{:?} is dir", de);
-            fs::remove_dir_all(de.path())?;
+            println!("{:?} is dir", de);
+            // fs::remove_dir_all(de.path())?;
         } else {
-            // println!("{:?} is file", de);
-            fs::remove_file(de.path())?;
+            println!("{:?} is file", de);
+            // fs::remove_file(de.path())?;
         }
     }
 

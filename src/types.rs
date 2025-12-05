@@ -1,4 +1,4 @@
-use clap::{Parser, Subcommand};
+use clap::{Parser, Subcommand, ValueHint};
 use core::fmt;
 use std::path::{self, PathBuf};
 use uuid::Uuid;
@@ -24,16 +24,15 @@ pub struct Args {
 #[derive(Subcommand, Debug)]
 pub enum SubCommand {
     //削除対象となるディレクトリを追加
-    #[arg()]
     Add {
-        #[arg(default_value = "./")]
-        path: path::PathBuf,
+        #[arg(default_value = "./",value_hint=ValueHint::FilePath)]
+        dir_path: path::PathBuf,
     },
     //削除の実行
     Run,
-    //指定の削除対象のディレクトリを除外する(未実装)
-    Exclude {
-        #[arg(default_value = "./")]
-        path: PathBuf,
+    //指定の削除対象のディレクトリを除外する
+    Drop {
+        #[arg(default_value = "./",value_hint=ValueHint::FilePath)]
+        dir_path: PathBuf,
     },
 }
